@@ -1,0 +1,49 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: codestar/circleci-scala-sbt-git:scala-2.12.2-sbt-0.13.13
+    services:
+      - docker
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - playjsonoptics-{{ checksum "project/plugins.sbt" }}-{{ checksum "build.sbt" }}
+            - playjsonoptics
+
+      - run:
+          name: compile, test
+          command: sbt compile test:compile test
+
+      - save_cache:
+          when: always
+          key: playjsonoptics-{{ checksum "project/plugins.sbt" }}-{{ checksum "build.sbt" }}
+          paths:
+            - ./target/resolution-cache
+            - ./target/streams
+            - ./project/target/resolution-cache
+            - ./project/target/streams
+            - ~/.sbt
+            - ~/.ivy2/cache
+            - ~/.m2
+      - save_cache:
+          when: always
+        # Changing this key/incrementing the number at the end is the only way to remove old dependencies and/or generate a more up-to-date cache
+          key: playjsonoptics-1
+          paths:
+            - ~/.sbt
+            - ~/.ivy2/cache
+            - ~/.coursier
+            - ~/.m2
+
+      - run:
+          when: always
+          name: collect test results
+          command: |
+            mkdir -p ~/junit/
+            find . -type f -regex ".*/target/test-reports/.*xml" -exec cp {} ~/junit/ \;
+
+      - store_test_results:
+          path: ~/junit
