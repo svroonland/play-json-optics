@@ -1,7 +1,7 @@
 package com.vroste.playjsonoptics
 
 import monocle.{Lens, Optional, Prism, Traversal}
-import play.api.libs.json.{JsArray, JsObject, JsPath, JsValue}
+import play.api.libs.json._
 import Optics._
 import monocle.std.option.some
 import cats.instances.option._
@@ -9,7 +9,8 @@ import cats.instances.option._
 /**
   * Create Optics from a [[JsPath]]
   *
-  * Using the path syntax is easier then manually composing optics
+  * Using the path syntax and [[JsLens]] is easier then manually composing lenses and prisms for some path.
+  * The intermediate optics are derived from [[Format]]s.
   */
 object JsLens {
 
@@ -22,22 +23,22 @@ object JsLens {
     *
     * Example:
     * {{{
-    *   JsLens[String](__ \ "value1") modify (_ + "with suffix")
+    *   JsLens[String](__ \ "value1") modify (_ + "additional characters")
     * }}}
     *
     * @param path
-    * @param prism Prism between [[play.api.libs.json.JsValue]] and [[T]]. Typically derived from a Format[T]
-    * @tparam T
+    * @tparam T Type of the value to work with, given that a [[Format]] is available.
+    *           Can also be a subtype of [[JsValue]].
     * @return
     */
-  def apply[T](path: JsPath)(implicit prism: Prism[JsValue, T]): Optional[JsValue, T] =
+  def apply[T: Format](path: JsPath): Optional[JsValue, T] =
     (jsObject
       composeLens optionalValueAtPath(path)
       composePrism some
-      composePrism prism)
+      composePrism prismFromFormat)
 
   /**
-    * An optional to a JsValue
+    * Create an optional to a JsValue
     */
   def apply(path: JsPath): Optional[JsValue, JsValue] =
     (jsObject
@@ -51,14 +52,13 @@ object JsLens {
     * at the given path altogether (prune the path). This can be done by calling {{{set(None)}}}
     *
     * @param path
-    * @param prism
     * @tparam T
     * @return
     */
-  def optional[T](path: JsPath)(implicit prism: Prism[JsValue, T]): Optional[JsValue, Option[T]] =
+  def optional[T: Format](path: JsPath): Optional[JsValue, Option[T]] =
     (jsObject
       composeLens optionalValueAtPath(path)
-      composePrism prism.below[Option]) // Maps Prism[A, B] to Prism[Option[A], Option[B]]
+      composePrism prismFromFormat.below[Option]) // Maps Prism[A, B] to Prism[Option[A], Option[B]]
 
   /**
     * Creates an optic for each of the children in a JsArray at the given path
@@ -67,14 +67,13 @@ object JsLens {
     * with other JsPath optics to apply modifications to elements deeper in the array
     *
     * @param path
-    * @param prism
     * @tparam T
     * @return
     */
-  def each[T](path: JsPath)(implicit prism: Prism[JsValue, T]): Traversal[JsValue, T] =
+  def each[T : Format](path: JsPath): Traversal[JsValue, T] =
     (JsLens[JsArray](path)
       composeTraversal jsArray
-      composePrism prism)
+      composePrism prismFromFormat)
 
   /**
     * Lens to optional value at the given path
