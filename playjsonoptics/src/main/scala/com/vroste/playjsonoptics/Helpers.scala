@@ -1,9 +1,9 @@
-package com.vroste.playjsonoptics.playjsonoptics
+package com.vroste.playjsonoptics
 
 import play.api.libs.json.{JsPath, JsValue}
 import Optics._
 
-class Helpers {
+object Helpers {
   implicit class JsPathExtensions(path: JsPath) {
     def moveTo(newPath: JsPath) = {
       val atOldPath = JsLens.optional[JsValue](path)

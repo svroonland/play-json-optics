@@ -1,4 +1,4 @@
-package com.vroste.playjsonoptics.playjsonoptics
+package com.vroste.playjsonoptics
 
 import monocle.{Lens, Optional, Prism, Traversal}
 import play.api.libs.json.{JsArray, JsObject, JsPath, JsValue}

@@ -1,4 +1,4 @@
-package com.vroste.playjsonoptics.playjsonoptics
+package com.vroste.playjsonoptics
 
 import cats.{Applicative, Traverse}
 import monocle.{PTraversal, Prism, Traversal}
@@ -14,10 +14,6 @@ object Optics {
 
   /**
     * Prism from a JsValue as T using an implicit Format[T] to decode the JsValue
-    *
-    * @param f
-    * @tparam T
-    * @return
     */
   implicit def prismFromFormat[T](implicit f: Format[T]): Prism[JsValue, T] =
     Prism[JsValue, T](f.reads(_).asOpt)(f.writes)

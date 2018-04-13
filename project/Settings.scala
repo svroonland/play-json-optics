@@ -4,26 +4,12 @@ import sbtassembly.AssemblyPlugin.autoImport._
 
 object Settings {
 
-
   lazy val settings = Seq(
     organization := "com.vroste",
     version := "0.0.1" + sys.props.getOrElse("buildNumber", default="0-SNAPSHOT"),
     scalaVersion := "2.12.0",
     publishMavenStyle := true,
-    publishArtifact in Test := false
-  )
-
-  lazy val testSettings = Seq(
-    fork in Test := false,
-    parallelExecution in Test := false
-  )
-
-  lazy val itSettings = Defaults.itSettings ++ Seq(
-    logBuffered in IntegrationTest := false,
-    fork in IntegrationTest := true
-  )
-
-  lazy val playjsonopticsSettings = Seq(
+    publishArtifact in Test := false,
     assemblyJarName in assembly := "playjsonoptics-" + version.value + ".jar",
     test in assembly := {},
     target in assembly := file(baseDirectory.value + "/../bin/"),
@@ -37,8 +23,13 @@ object Settings {
     },
     libraryDependencies ++= Seq(
       "com.typesafe.play" %% "play-json" % "2.6.7",
-      "com.github.julien-truffaut" %%  "monocle-core"  % "1.5.1-cats"
+      "com.github.julien-truffaut" %%  "monocle-core"  % "1.5.1-cats",
+      "org.scalatest" %% "scalatest" % "3.0.4" % Test
     )
   )
 
+  lazy val testSettings = Seq(
+    fork in Test := false,
+    parallelExecution in Test := false
+  )
 }
