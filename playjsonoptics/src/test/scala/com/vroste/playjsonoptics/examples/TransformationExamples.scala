@@ -1,11 +1,12 @@
-package com.vroste.playjsonoptics
+package com.vroste.playjsonoptics.examples
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit.DAYS
 
+import com.vroste.playjsonoptics.JsLens
 import org.scalatest.{FlatSpec, Inside, MustMatchers}
 import play.api.libs.json._
-import Optics._
+import com.vroste.playjsonoptics.Helpers._
 
 /**
   * Series of examples for how to use PlayJsonOptics to transform JSON
@@ -25,19 +26,6 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
         "time": "2018-01-30T12:30:24Z"
     }""")
 
-  "Transforming Play JSON with optics" must "read an optional field" in {
-    val lens = JsLens[JsValue](__ \ "estimateOrActual")
-
-    val result = lens.getOption(jsonWithField)
-    result must contain(JsString("ESTIMATE"))
-
-    val result2 = lens.getOption(jsonWithoutField)
-    result2 mustBe None
-  }
-
-  it must "allow either modifications" in {
-    val prism = Optics.prismFromFormat[String].right
-  }
 
   it must "modify an optional field" in {
     val modify = JsLens[String](__ \ "estimateOrActual") modify (_ + "V2")
@@ -56,7 +44,7 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
   }
 
   it must "set a default value if a field is missing" in {
-    val modify = JsLens.optional[String](__ \ "estimateOrActual") modify (_ orElse Some("DEFAULT"))
+    val modify = (__ \ "estimateOrActual").setDefault[String]("DEFAULT")
 
     val result = modify(jsonWithoutField.as[JsObject])
     withClue(result) {
@@ -93,9 +81,6 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
       modify (_.plus(1, DAYS)))
 
     val result = modify(json)
-    withClue(result) {
-      println(result)
-    }
   }
 
   it must "remove a field" in {
@@ -158,12 +143,15 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
     val modify = JsLens.each[JsValue](__ \ "times") composeOptional JsLens[String](__ \ "estimateOrActual") modify (_ + "V2")
 
     val result = modify(arrayOfTimesJson)
-    println("Array of structs: ")
-    println(Json.prettyPrint(result))
   }
 
-  it must "move or rename a field" in {
-    import com.vroste.playjsonoptics.Helpers._
+  it must "apply transformations to an array of structures that satisfy some condition" in {
+    val modify = JsLens.each[JsValue](__ \ "times") composeOptional JsLens[String](__ \ "estimateOrActual") modify (_ + "V2")
+
+    val result = modify(arrayOfTimesJson)
+  }
+
+  it must "rename a field" in {
     val moveField = (__ \ "times") moveTo (__ \ "nested" \ "datetimes")
 
     val result = moveField(arrayOfTimesJson)
