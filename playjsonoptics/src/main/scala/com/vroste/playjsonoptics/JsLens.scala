@@ -72,7 +72,7 @@ object JsLens {
     * When a non-empty JsValue is set, it is deep merged with the existing JSON
     * at that path. An empty value will result in the path being pruned
     */
-  private def optionalValueAtPath(path: JsPath) =
+  private def optionalValueAtPath(path: JsPath): Lens[JsValue, Option[JsValue]] =
     Lens[JsValue, Option[JsValue]](path.asSingleJsResult(_).asOpt) {
       newValueOpt =>
         root =>

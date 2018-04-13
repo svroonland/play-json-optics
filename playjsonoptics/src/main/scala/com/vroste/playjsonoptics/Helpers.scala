@@ -13,10 +13,22 @@ object Helpers {
           .getOption(json)
           .flatten
           .fold(identity[JsValue] _) { value =>
-            atNewPath.set(Some(value)) andThen atOldPath.set(None)
+            atNewPath.set(Some(value))
           }(json)
     }
 
+    /**
+      * Transformation that moves the value at this path to a new path
+      *
+      * The current path is pruned
+      */
+    def moveTo(newPath: JsPath): JsValue => JsValue = {
+      copyTo(newPath) andThen JsLens.optional[JsValue](path).set(None)
+    }
+
+    /**
+      * Transformation that sets a default value at the given path if the path is missing
+      */
     def setDefault[T : Format](defaultValue: T): JsValue => JsValue =
       JsLens.optional[T](path) modify (_ orElse Some(defaultValue))
   }
