@@ -4,7 +4,10 @@ import play.api.libs.json.{Format, JsPath, JsValue}
 
 object Helpers {
   implicit class JsPathExtensions(path: JsPath) {
-    def moveTo(newPath: JsPath): JsValue => JsValue = {
+    /**
+      * Transformation that copies the value at this path to anothe rpath
+      */
+    def copyTo(newPath: JsPath): JsValue => JsValue = {
       val atOldPath = JsLens.optional[JsValue](path)
       val atNewPath = JsLens.optional[JsValue](newPath)
 
