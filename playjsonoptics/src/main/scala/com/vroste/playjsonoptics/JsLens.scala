@@ -89,6 +89,6 @@ object JsLens {
     }
 
   // Allows remove syntax
-  implicit val jsAt: At[JsValue, JsPath, Option[JsValue]] = optionalValueAtPath(_)
+  implicit val jsAtValue: At[JsValue, JsPath, Option[JsValue]] = optionalValueAtPath(_)
 }
 

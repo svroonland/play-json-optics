@@ -40,6 +40,14 @@ class JsLensSpec extends FlatSpec with MustMatchers with Inside with OptionValue
     optic.getOption(json).value mustBe Some("value1")
   }
 
+  it must "create intermediate paths when setting a value at some path in empty JSON" in {
+    val json = Json.obj()
+
+    val optic = JsLens.optional[String](__ \ "a" \ "b")
+
+    optic.set(Some("c"))(json) mustBe Json.obj("a" -> Json.obj("b" -> JsString("c")))
+  }
+
   it must "remove the value at that path" in {
     val json = Json.obj("field1" -> JsString("value1"), "field2" -> JsString("value2"))
     val expectedJson = Json.obj("field1" -> JsString("value1"))
@@ -69,5 +77,29 @@ class JsLensSpec extends FlatSpec with MustMatchers with Inside with OptionValue
     val optic = JsLens.each[String](__ \ "field1")
 
     optic.modify(_ + "X")(json) mustBe expectedJson
+  }
+
+  "Removing at a given path" must "prune the JSON at that path" in {
+    val json: JsValue = Json.obj(
+      "field1" -> Json.obj(
+        "field1" -> JsString("value1"),
+        "field2" -> JsString("value2")
+      ),
+      "field2" -> Json.obj(
+        "field1" -> JsString("value3"),
+        "field2" -> JsString("value4")
+      )
+    )
+    val expectedJson = Json.obj(
+      "field1" -> Json.obj(
+        "field1" -> JsString("value1"),
+        "field2" -> JsString("value2")
+      )
+    )
+
+    import monocle.function.At._
+    import JsLens._
+
+    remove(__ \ "field2")(json) mustBe expectedJson
   }
 }
