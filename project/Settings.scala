@@ -7,7 +7,7 @@ object Settings {
   lazy val settings = Seq(
     organization := "com.vroste",
     version := "0.0.1" + sys.props.getOrElse("buildNumber", default="0-SNAPSHOT"),
-    scalaVersion := "2.12.0",
+    scalaVersion := "2.12.5",
     publishMavenStyle := true,
     publishArtifact in Test := false,
     assemblyJarName in assembly := "playjsonoptics-" + version.value + ".jar",
