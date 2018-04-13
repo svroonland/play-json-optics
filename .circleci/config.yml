@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: codestar/circleci-scala-sbt-git:scala-2.12.2-sbt-0.13.13
+      - image: codestar/circleci-scala-sbt-git:scala-2.12.2-sbt-0.13.15
     services:
       - docker
 
