@@ -3,10 +3,12 @@ package com.vroste.playjsonoptics.examples
 import java.time.Instant
 import java.time.temporal.ChronoUnit.DAYS
 
+import com.vroste.playjsonoptics.Helpers._
 import com.vroste.playjsonoptics.JsLens
+import com.vroste.playjsonoptics.JsLens.jsAt
+import monocle.function.At._
 import org.scalatest.{FlatSpec, Inside, MustMatchers}
 import play.api.libs.json._
-import com.vroste.playjsonoptics.Helpers._
 
 /**
   * Series of examples for how to use PlayJsonOptics to transform JSON
@@ -83,10 +85,11 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
     val result = modify(json)
   }
 
-  it must "remove a field" in {
-    val modify = JsLens.optional[String](__ \ "estimateOrActual").set(None)
 
-    val result = modify(jsonWithField.as[JsObject])
+  it must "remove a field" in {
+
+    val result = remove(__ \ "estimateOrActual")(jsonWithField)
+
     withClue(result) {
       inside(result) {
         case o: JsObject =>
@@ -94,7 +97,7 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
       }
     }
 
-    val result2 = modify(jsonWithoutField.as[JsObject])
+    val result2 = remove(__ \ "estimateOrActual")(jsonWithoutField)
     withClue(result2) {
       inside(result2) {
         case o: JsObject =>

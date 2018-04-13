@@ -2,6 +2,7 @@ package com.vroste.playjsonoptics
 
 import cats.instances.option._
 import com.vroste.playjsonoptics.Optics._
+import monocle.function.At
 import monocle.std.option.some
 import monocle.{Lens, Optional, Traversal}
 import play.api.libs.json._
@@ -86,5 +87,8 @@ object JsLens {
             case _ => root
           }
     }
+
+  // Allows remove syntax
+  implicit val jsAt: At[JsValue, JsPath, Option[JsValue]] = optionalValueAtPath(_)
 }
 
