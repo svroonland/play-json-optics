@@ -26,5 +26,8 @@ object Optics {
       case _ => F.pure(s)
     }
   }
+
+  def jsArrayOfT[T](implicit prism: Prism[JsValue, T]): Traversal[JsArray, T] =
+    jsArray composePrism prism
 }
 
