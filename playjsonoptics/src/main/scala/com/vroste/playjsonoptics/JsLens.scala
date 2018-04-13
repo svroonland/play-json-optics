@@ -1,10 +1,10 @@
 package com.vroste.playjsonoptics
 
-import monocle.{Lens, Optional, Prism, Traversal}
-import play.api.libs.json._
-import Optics._
-import monocle.std.option.some
 import cats.instances.option._
+import com.vroste.playjsonoptics.Optics._
+import monocle.std.option.some
+import monocle.{Lens, Optional, Traversal}
+import play.api.libs.json._
 
 /**
   * Create Optics from a [[JsPath]]
@@ -32,18 +32,9 @@ object JsLens {
     * @return
     */
   def apply[T: Format](path: JsPath): Optional[JsValue, T] =
-    (jsObject
-      composeLens optionalValueAtPath(path)
+    (optionalValueAtPath(path)
       composePrism some
       composePrism prismFromFormat)
-
-  /**
-    * Create an optional to a JsValue
-    */
-  def apply(path: JsPath): Optional[JsValue, JsValue] =
-    (jsObject
-      composeLens optionalValueAtPath(path)
-      composePrism some)
 
   /**
     * Creates an Optional to an optional value of T at the given path in a JSON value
@@ -56,8 +47,7 @@ object JsLens {
     * @return
     */
   def optional[T: Format](path: JsPath): Optional[JsValue, Option[T]] =
-    (jsObject
-      composeLens optionalValueAtPath(path)
+    (optionalValueAtPath(path)
       composePrism prismFromFormat.below[Option]) // Maps Prism[A, B] to Prism[Option[A], Option[B]]
 
   /**
@@ -70,7 +60,7 @@ object JsLens {
     * @tparam T
     * @return
     */
-  def each[T : Format](path: JsPath): Traversal[JsValue, T] =
+  def each[T: Format](path: JsPath): Traversal[JsValue, T] =
     (JsLens[JsArray](path)
       composeTraversal jsArray
       composePrism prismFromFormat)
@@ -82,11 +72,18 @@ object JsLens {
     * at that path. An empty value will result in the path being pruned
     */
   private def optionalValueAtPath(path: JsPath) =
-    Lens[JsObject, Option[JsValue]](path.asSingleJsResult(_).asOpt) {
-      valueOpt =>
+    Lens[JsValue, Option[JsValue]](path.asSingleJsResult(_).asOpt) {
+      newValueOpt =>
         root =>
-          valueOpt.fold(path.json.prune.reads(root).getOrElse(root)) { value =>
-            root ++ JsPath.createObj((path, value))
+          root match {
+            case rootObj@JsObject(_) =>
+              newValueOpt match {
+                case Some(obj) =>
+                  rootObj ++ JsPath.createObj((path, obj))
+                case None =>
+                  path.json.prune.reads(rootObj).getOrElse(rootObj)
+              }
+            case _ => root
           }
     }
 }
