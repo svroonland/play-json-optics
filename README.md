@@ -27,7 +27,7 @@ Add the following to your build.sbt:
 
 ```
 resolvers += Resolver.bintrayRepo("vroste", "maven"),
-libraryDependencies += "nl.vroste" % "play-json-optics_2.12" % "0.1.0.0"
+libraryDependencies += "nl.vroste" % "play-json-optics_2.12" % "0.1.1.0"
 ```
 
 ## Example
