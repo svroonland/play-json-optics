@@ -22,6 +22,14 @@ Things you can do with this library:
 
 Optics to any path within a JSON data structure can be expressed using `play-json`'s path syntax, eg `__ \ "user" \ "name"`.
 
+## Usage
+Add the following to your build.sbt:
+
+```
+resolvers += Resolver.bintrayRepo("vroste", "maven"),
+libraryDependencies += "nl.vroste" % "play-json-optics_2.12" % "0.1.0.0"
+```
+
 ## Example
 
 ### Change strings to booleans in an array of Json objects
