@@ -1,4 +1,4 @@
-package com.vroste.playjsonoptics
+package nl.vroste.playjsonoptics
 
 import play.api.libs.json.{Format, JsPath, JsValue}
 

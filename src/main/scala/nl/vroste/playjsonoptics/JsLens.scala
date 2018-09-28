@@ -1,7 +1,7 @@
-package com.vroste.playjsonoptics
+package nl.vroste.playjsonoptics
 
 import cats.instances.option._
-import com.vroste.playjsonoptics.Optics._
+import Optics._
 import monocle.function.At
 import monocle.std.option.some
 import monocle.{Lens, Optional, Traversal}

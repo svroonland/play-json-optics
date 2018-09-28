@@ -1,12 +1,12 @@
-package com.vroste.playjsonoptics.examples
+package nl.vroste.playjsonoptics.examples
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit.DAYS
 
-import com.vroste.playjsonoptics.Helpers._
-import com.vroste.playjsonoptics.JsLens
-import com.vroste.playjsonoptics.JsLens.jsAt
 import monocle.function.At._
+import nl.vroste.playjsonoptics.Helpers._
+import nl.vroste.playjsonoptics.JsLens
+import nl.vroste.playjsonoptics.JsLens.jsAt
 import org.scalatest.{FlatSpec, Inside, MustMatchers}
 import play.api.libs.json._
 
@@ -16,14 +16,16 @@ import play.api.libs.json._
 class TransformationExamples extends FlatSpec with MustMatchers with Inside {
 
   val jsonWithField =
-    Json.parse(s"""
+    Json.parse(
+      s"""
     {
         "time": "2018-01-30T12:30:24Z",
         "estimateOrActual": "ESTIMATE"
     }""")
 
   val jsonWithoutField =
-    Json.parse(s"""
+    Json.parse(
+      s"""
     {
         "time": "2018-01-30T12:30:24Z"
     }""")
@@ -66,16 +68,17 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
   }
 
   it must "work with values in a custom type when a Format for that type is available" in {
-    val json = Json.parse(s""" { "times": [
-                             |      {
-                             |       "time": "2018-01-30T12:30:24Z"
-                             |      },
-                             |      {
-                             |       "time": "2018-01-30T12:30:24Z",
-                             |       "estimateOrActual": "ESTIMATE"
-                             |      }
-                             |  ]
-                             |}
+    val json = Json.parse(
+      s""" { "times": [
+         |      {
+         |       "time": "2018-01-30T12:30:24Z"
+         |      },
+         |      {
+         |       "time": "2018-01-30T12:30:24Z",
+         |       "estimateOrActual": "ESTIMATE"
+         |      }
+         |  ]
+         |}
        """.stripMargin)
 
     val modify = (JsLens.each[JsValue](__ \ "times")
@@ -109,7 +112,7 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
   it must "change the type of a field" in {
     val modify = JsLens[JsValue](__ \ "estimateOrActual").modify {
       case JsString(e) => JsBoolean(e == "ESTIMATE")
-      case _           => JsBoolean(false)
+      case _ => JsBoolean(false)
     }
 
     val result = modify(jsonWithField.as[JsObject])
@@ -130,16 +133,17 @@ class TransformationExamples extends FlatSpec with MustMatchers with Inside {
 
   }
 
-  val arrayOfTimesJson = Json.parse(s""" { "times": [
-                                       |      {
-                                       |       "time": "2018-01-30T12:30:24Z"
-                                       |      },
-                                       |      {
-                                       |       "time": "2018-01-30T12:30:24Z",
-                                       |       "estimateOrActual": "ESTIMATE"
-                                       |      }
-                                       |  ]
-                                       |}
+  val arrayOfTimesJson = Json.parse(
+    s""" { "times": [
+       |      {
+       |       "time": "2018-01-30T12:30:24Z"
+       |      },
+       |      {
+       |       "time": "2018-01-30T12:30:24Z",
+       |       "estimateOrActual": "ESTIMATE"
+       |      }
+       |  ]
+       |}
        """.stripMargin)
 
   it must "apply transformations to an array of structures" in {

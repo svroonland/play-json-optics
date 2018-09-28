@@ -5,7 +5,7 @@ import sbtassembly.AssemblyPlugin.autoImport._
 object Settings {
 
   lazy val settings = Seq(
-    organization := "com.vroste",
+    organization := "nl.vroste",
     version := "0.0.1" + sys.props.getOrElse("buildNumber", default="0-SNAPSHOT"),
     scalaVersion := "2.12.5",
     publishMavenStyle := true,
@@ -24,8 +24,11 @@ object Settings {
     libraryDependencies ++= Seq(
       "com.typesafe.play" %% "play-json" % "2.6.7",
       "com.github.julien-truffaut" %%  "monocle-core"  % "1.5.1-cats",
+      "org.typelevel" %% "alleycats-core" % "1.1.0",
       "org.scalatest" %% "scalatest" % "3.0.4" % Test
-    )
+    ),
+    scalacOptions ++= Seq("-language:higherKinds"),
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
   )
 
   lazy val testSettings = Seq(

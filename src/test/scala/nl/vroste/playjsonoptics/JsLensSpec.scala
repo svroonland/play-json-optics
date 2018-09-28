@@ -1,4 +1,4 @@
-package com.vroste.playjsonoptics
+package nl.vroste.playjsonoptics
 
 import org.scalatest.{FlatSpec, Inside, MustMatchers, OptionValues}
 import play.api.libs.json._

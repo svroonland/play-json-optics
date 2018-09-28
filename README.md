@@ -26,7 +26,7 @@ Optics to any path within a JSON data structure can be expressed using `play-jso
 
 ### Change strings to booleans in an array of Json objects
 ```scala
-import com.vroste.playjsonoptics.JsLens
+import nl.vroste.playjsonoptics.JsLens
 import play.api.libs.json._
 
 val json = Json.parse(""" 

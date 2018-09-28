@@ -1,15 +1,16 @@
-package com.vroste.playjsonoptics
+package nl.vroste.playjsonoptics
 
+import cats.instances.list._
 import cats.{Applicative, Traverse}
 import monocle.{PTraversal, Prism, Traversal}
 import play.api.libs.json._
-import cats.instances.list._
 
 /**
   * Monocle Optics for [[JsValue]]
   */
 object Optics {
   implicit val jsValue: Prism[JsValue, JsValue] = Prism.id
+  implicit val jsString: Prism[JsValue, JsString] = prismFromFormat[JsString]
   implicit val jsObject: Prism[JsValue, JsObject] = prismFromFormat[JsObject]
 
   /**
