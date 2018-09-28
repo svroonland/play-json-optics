@@ -79,6 +79,32 @@ class JsLensSpec extends FlatSpec with MustMatchers with Inside with OptionValue
     optic.modify(_ + "X")(json) mustBe expectedJson
   }
 
+  it must "leave siblings intact when modifing at some path" in {
+    val json = Json.parse(
+      """
+        |{"a" : {
+        |   "b" : "someValue",
+        |   "c" : "otherValue"
+        |   }
+        | }
+      """.stripMargin
+    )
+
+    val expectedJson = Json.parse(
+      """
+        |{"a" : {
+        |   "b" : "someValue",
+        |   "c" : "otherValueadd"
+        |   }
+        | }
+      """.stripMargin
+    )
+
+    val optic = JsLens[String](__ \ "a" \ "c")
+
+    optic.modify(_ + "add")(json) mustBe expectedJson
+  }
+
   "Removing at a given path" must "prune the JSON at that path" in {
     val json: JsValue = Json.obj(
       "field1" -> Json.obj(

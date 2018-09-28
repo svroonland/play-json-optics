@@ -75,17 +75,16 @@ object JsLens {
   private def optionalValueAtPath(path: JsPath): Lens[JsValue, Option[JsValue]] =
     Lens[JsValue, Option[JsValue]](path.asSingleJsResult(_).asOpt) {
       newValueOpt =>
-        root =>
-          root match {
-            case rootObj@JsObject(_) =>
-              newValueOpt match {
-                case Some(obj) =>
-                  rootObj ++ JsPath.createObj((path, obj))
-                case None =>
-                  path.json.prune.reads(rootObj).getOrElse(rootObj)
-              }
-            case _ => root
-          }
+        {
+          case rootObj@JsObject(_) =>
+            newValueOpt match {
+              case Some(obj) =>
+                rootObj deepMerge JsPath.createObj((path, obj))
+              case None =>
+                path.json.prune.reads(rootObj).getOrElse(rootObj)
+            }
+          case root => root
+        }
     }
 
   // Allows remove syntax
