@@ -1,12 +1,13 @@
 import sbt._
 import Keys._
 import sbtassembly.AssemblyPlugin.autoImport._
+import bintray.BintrayKeys._
 
 object Settings {
 
   lazy val settings = Seq(
     organization := "nl.vroste",
-    version := "0.1.0" + sys.props.getOrElse("buildNumber", default="0-SNAPSHOT"),
+    version := "0.1.0." + sys.props.getOrElse("buildNumber", default="0"),
     scalaVersion := "2.12.5",
     publishMavenStyle := true,
     publishArtifact in Test := false,
@@ -28,7 +29,11 @@ object Settings {
       "org.scalatest" %% "scalatest" % "3.0.4" % Test
     ),
     scalacOptions ++= Seq("-language:higherKinds"),
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6"),
+    bintrayOrganization := Some("vroste"),
+    bintrayReleaseOnPublish in ThisBuild := false,
+    bintrayPackageLabels := Seq("play-framework", "play-json", "optics"),
+    licenses += ("Apache-2.0", new URL("https://www.apache.org/licenses/LICENSE-2.0.txt"))
   )
 
   lazy val testSettings = Seq(
