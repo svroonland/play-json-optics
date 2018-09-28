@@ -6,7 +6,7 @@ object Settings {
 
   lazy val settings = Seq(
     organization := "nl.vroste",
-    version := "0.0.1" + sys.props.getOrElse("buildNumber", default="0-SNAPSHOT"),
+    version := "0.1.0" + sys.props.getOrElse("buildNumber", default="0-SNAPSHOT"),
     scalaVersion := "2.12.5",
     publishMavenStyle := true,
     publishArtifact in Test := false,
