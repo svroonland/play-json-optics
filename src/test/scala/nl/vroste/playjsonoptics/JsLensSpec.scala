@@ -56,6 +56,15 @@ class JsLensSpec extends FlatSpec with MustMatchers with Inside with OptionValue
     optic.set(None)(json) mustBe expectedJson
   }
 
+  it must "modify a value at the root path" in {
+    val json = Json.obj("field1" -> JsString("value1"))
+    val expectedJson = Json.obj("field1" -> JsString("value1X"))
+
+    val optic = JsLens[JsValue](__ \ "field1")
+    val innerOptic = JsLens[String](__)
+    optic.modify(innerOptic.modify(_ + "X"))(json) mustBe expectedJson
+  }
+
   "A Traversal JsLens for for a String at some path" must "read the values at that path given applicable JSON" in {
     val json = Json.obj("field1" -> Json.arr(JsString("value1"), JsString("value2")))
 

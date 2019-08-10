@@ -79,12 +79,38 @@ object JsLens {
           case rootObj@JsObject(_) =>
             newValueOpt match {
               case Some(obj) =>
-                rootObj deepMerge JsPath.createObj((path, obj))
+                createAtPath(path, obj) match {
+                  // Deep merge the root object with the new value at the given path
+                  case o : JsObject =>
+                    rootObj deepMerge o
+                  case v @ _ =>
+                    // Replace
+                    v
+                }
               case None =>
                 path.json.prune.reads(rootObj).getOrElse(rootObj)
             }
-          case root => root
+          case root =>
+            newValueOpt match {
+              case Some(obj) =>
+                createAtPath(path, obj)
+              case None =>
+                path.json.prune.reads(root).getOrElse(root)
+            }
         }
+    }
+
+  /**
+    * Creates a JsObject with a value at some (possibly nested) sub path
+    *
+    * @param path
+    * @param value
+    */
+  private def createAtPath(path: JsPath, value: JsValue): JsValue =
+    if (path == __) {
+      value
+    } else {
+      JsPath.createObj((path, value))
     }
 
   // Allows remove syntax
