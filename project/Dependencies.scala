@@ -4,8 +4,8 @@ import Keys._
 object Dependencies {
 
   lazy val version = new {
-      val scalaTest       = "3.0.0"
-      val scalaCheck      = "1.13.4"
+      val scalaTest       = "3.0.8"
+      val scalaCheck      = "1.14.3"
   }
 
   lazy val libs = new  {
