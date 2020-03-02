@@ -7,8 +7,9 @@ object Settings {
 
   lazy val settings = Seq(
     organization := "nl.vroste",
-    version := "0.1.2." + sys.props.getOrElse("buildNumber", default="0"),
-    scalaVersion := "2.12.5",
+    version := "0.2.0." + sys.props.getOrElse("buildNumber", default="0"),
+    scalaVersion := "2.13.1",
+    crossScalaVersions := Seq("2.12.10", scalaVersion.value),
     publishMavenStyle := true,
     publishArtifact in Test := false,
     assemblyJarName in assembly := "playjsonoptics-" + version.value + ".jar",
@@ -23,13 +24,13 @@ object Settings {
       case _ => MergeStrategy.first
     },
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play-json" % "2.6.7",
-      "com.github.julien-truffaut" %%  "monocle-core"  % "1.5.1-cats",
-      "org.typelevel" %% "alleycats-core" % "1.1.0",
-      "org.scalatest" %% "scalatest" % "3.0.4" % Test
+      "com.typesafe.play" %% "play-json" % "2.7.4",
+      "com.github.julien-truffaut" %%  "monocle-core"  % "2.0.2",
+      "org.typelevel" %% "alleycats-core" % "2.1.0",
+      "org.scalatest" %% "scalatest" % "3.0.8" % Test
     ),
     scalacOptions ++= Seq("-language:higherKinds"),
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6"),
+    addCompilerPlugin("org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full),
     bintrayOrganization := Some("vroste"),
     bintrayReleaseOnPublish in ThisBuild := false,
     bintrayPackageLabels := Seq("play-framework", "play-json", "optics"),

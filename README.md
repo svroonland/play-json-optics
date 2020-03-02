@@ -1,3 +1,5 @@
+
+[![Bintray](https://img.shields.io/bintray/v/vroste/maven/play-json-optics?label=latest)](https://bintray.com/vroste/maven/play-json-optics/_latestVersion)
 [![CircleCI](https://circleci.com/gh/svroonland/play-json-optics.svg?style=svg)](https://circleci.com/gh/svroonland/play-json-optics)
 
 # play-json-optics
@@ -27,8 +29,15 @@ Add the following to your build.sbt:
 
 ```
 resolvers += Resolver.bintrayRepo("vroste", "maven"),
-libraryDependencies += "nl.vroste" % "play-json-optics_2.12" % "0.1.1.0"
+libraryDependencies += "nl.vroste" %% "play-json-optics" % "0.2.0.0"
 ```
+
+## Version compatibility
+
+| Version | Play-json | Scala          | Cats |
+| ------- | --------- | -------------- | ---- |
+| 0.2.0.0 | 2.7       | 2.13<br />2.12 | 2    |
+| 0.1.1.0 | 2.6       | 2.12           | 1    |
 
 ## Example
 

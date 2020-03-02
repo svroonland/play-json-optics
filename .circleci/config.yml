@@ -2,18 +2,18 @@ version: 2
 jobs:
   build:
     docker:
-      - image: codestar/circleci-scala-sbt-git:scala-2.12.5-sbt-1.1.1
+      - image: circleci/openjdk:8
 
     steps:
       - checkout
       - restore_cache:
           keys:
             - playjsonoptics-{{ checksum "project/plugins.sbt" }}-{{ checksum "build.sbt" }}
-            - playjsonoptics
+            - playjsonoptics-2
 
       - run:
           name: compile, test
-          command: sbt compile test:compile test exit
+          command: sbt +compile +test:compile +test exit
 
       - save_cache:
           when: always
@@ -25,16 +25,16 @@ jobs:
             - ./project/target/streams
             - ~/.sbt
             - ~/.ivy2/cache
-            - ~/.m2
+            - ~/.coursier
+
       - save_cache:
           when: always
         # Changing this key/incrementing the number at the end is the only way to remove old dependencies and/or generate a more up-to-date cache
-          key: playjsonoptics-1
+          key: playjsonoptics-2
           paths:
             - ~/.sbt
             - ~/.ivy2/cache
             - ~/.coursier
-            - ~/.m2
 
       - run:
           when: always
