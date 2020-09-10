@@ -24,7 +24,7 @@ object Settings {
       case _ => MergeStrategy.first
     },
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play-json" % "2.7.4",
+      "com.typesafe.play" %% "play-json" % "2.9.1",
       "com.github.julien-truffaut" %%  "monocle-core"  % "2.0.2",
       "org.typelevel" %% "alleycats-core" % "2.1.0",
       "org.scalatest" %% "scalatest" % "3.0.8" % Test
