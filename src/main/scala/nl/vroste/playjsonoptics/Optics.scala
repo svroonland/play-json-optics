@@ -1,6 +1,4 @@
 package nl.vroste.playjsonoptics
-
-import cats.instances.list._
 import cats.{Applicative, Traverse}
 import monocle.{PTraversal, Prism, Traversal}
 import play.api.libs.json._

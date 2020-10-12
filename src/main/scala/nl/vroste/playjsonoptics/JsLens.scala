@@ -1,6 +1,4 @@
 package nl.vroste.playjsonoptics
-
-import cats.instances.option._
 import Optics._
 import monocle.function.At
 import monocle.std.option.some
