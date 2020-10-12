@@ -26,8 +26,8 @@ object Settings {
     libraryDependencies ++= Seq(
       "com.typesafe.play" %% "play-json" % "2.7.4",
       "com.github.julien-truffaut" %%  "monocle-core"  % "2.1.0",
-      "org.typelevel" %% "alleycats-core" % "2.1.1",
-      "org.scalatest" %% "scalatest" % "3.2.2" % Test
+      "org.typelevel" %% "alleycats-core" % "2.2.0",
+      "org.scalatest" %% "scalatest" % "3.0.9" % Test
     ),
     scalacOptions ++= Seq("-language:higherKinds"),
     addCompilerPlugin("org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full),
