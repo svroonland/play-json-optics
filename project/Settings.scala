@@ -27,7 +27,7 @@ object Settings {
       "com.typesafe.play" %% "play-json" % "2.7.4",
       "com.github.julien-truffaut" %%  "monocle-core"  % "2.0.5",
       "org.typelevel" %% "alleycats-core" % "2.1.0",
-      "org.scalatest" %% "scalatest" % "3.0.8" % Test
+      "org.scalatest" %% "scalatest" % "3.0.9" % Test
     ),
     scalacOptions ++= Seq("-language:higherKinds"),
     addCompilerPlugin("org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full),
