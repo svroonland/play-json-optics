@@ -1,9 +1,11 @@
 package nl.vroste.playjsonoptics
 
-import org.scalatest.{FlatSpec, Inside, MustMatchers, OptionValues}
+import org.scalatest.{Inside, OptionValues}
 import play.api.libs.json._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class JsLensSpec extends FlatSpec with MustMatchers with Inside with OptionValues {
+class JsLensSpec extends AnyFlatSpec with Matchers with Inside with OptionValues {
   "A JsLens for a single String value at some path" must "read the value at that path given applicable JSON" in {
     val json = Json.obj("field1" -> JsString("value1"))
 
