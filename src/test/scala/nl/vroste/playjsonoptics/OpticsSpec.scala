@@ -1,15 +1,17 @@
 package nl.vroste.playjsonoptics
 
-import org.scalatest.{FlatSpec, Inside, MustMatchers, OptionValues}
+import org.scalatest.{Inside, OptionValues}
 import play.api.libs.json._
 import Optics._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
 case class DummyData(field1: String)
 object DummyData {
   implicit val format: Format[DummyData] = Json.format
 }
 
-class OpticsSpec extends FlatSpec with MustMatchers with Inside with OptionValues {
+class OpticsSpec extends AnyFlatSpec with Matchers with Inside with OptionValues {
   "The JsObject prism " must "read a JsObject for the JSON of an object" in {
     val json = Json.obj("field1" -> JsString("value1"))
 

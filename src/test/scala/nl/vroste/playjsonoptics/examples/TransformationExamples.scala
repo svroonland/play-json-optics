@@ -7,13 +7,15 @@ import monocle.function.At._
 import nl.vroste.playjsonoptics.Helpers._
 import nl.vroste.playjsonoptics.JsLens
 import nl.vroste.playjsonoptics.JsLens.jsAt
-import org.scalatest.{FlatSpec, Inside, MustMatchers}
+import org.scalatest.Inside
 import play.api.libs.json._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
 /**
   * Series of examples for how to use PlayJsonOptics to transform JSON
   */
-class TransformationExamples extends FlatSpec with MustMatchers with Inside {
+class TransformationExamples extends AnyFlatSpec with Matchers with Inside {
 
   val jsonWithField =
     Json.parse(
