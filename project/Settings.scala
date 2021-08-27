@@ -30,7 +30,7 @@ object Settings {
       "org.scalatest" %% "scalatest" % "3.2.3" % Test
     ),
     scalacOptions ++= Seq("-language:higherKinds"),
-    addCompilerPlugin("org.typelevel" % "kind-projector" % "0.11.3" cross CrossVersion.full),
+    addCompilerPlugin("org.typelevel" % "kind-projector" % "0.13.1" cross CrossVersion.full),
     bintrayOrganization := Some("vroste"),
     bintrayReleaseOnPublish in ThisBuild := false,
     bintrayPackageLabels := Seq("play-framework", "play-json", "optics"),
