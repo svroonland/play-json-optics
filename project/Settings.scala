@@ -9,7 +9,7 @@ object Settings {
     organization := "nl.vroste",
     version := "0.2.0." + sys.props.getOrElse("buildNumber", default="0"),
     scalaVersion := "2.13.1",
-    crossScalaVersions := Seq("2.12.10", scalaVersion.value),
+    crossScalaVersions := Seq("2.12.15", scalaVersion.value),
     publishMavenStyle := true,
     publishArtifact in Test := false,
     assemblyJarName in assembly := "playjsonoptics-" + version.value + ".jar",
